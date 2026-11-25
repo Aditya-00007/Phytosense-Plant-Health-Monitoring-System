@@ -2,6 +2,7 @@
 export const ENDPOINTS = {
   login: '/auth/login',
   register: '/auth/register',
+  profile: '/auth/profile',
   diagnose: '/predict',
   weather: '/weather',
   alerts: '/alerts',

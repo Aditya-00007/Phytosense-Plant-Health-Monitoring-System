@@ -1,13 +1,21 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { CROPS } from '../config/crops';
+import { useAuth } from '../context/AuthContext';
 import { diagnose } from '../services/plantService';
 import { getCoords } from '../utils/location';
+import { getMainCrop, parseCropList } from '../utils/profile';
 import { useAction } from '../utils/useAction';
 
 export function useScanController(navigation) {
+  const { user } = useAuth();
+  const crops = useMemo(() => {
+    const userCrops = [...parseCropList(user?.primaryCrops), ...parseCropList(user?.secondaryCrops)];
+    return Array.from(new Set([...userCrops, ...CROPS]));
+  }, [user?.primaryCrops, user?.secondaryCrops]);
+
   const [imageUri, setImageUri] = useState(null);
-  const [crop, setCrop] = useState(CROPS[0]);
+  const [crop, setCrop] = useState(() => getMainCrop(user) || CROPS[0]);
 
   const analyzeAction = useAction(async () => {
     const coords = await getCoords();
@@ -34,7 +42,7 @@ export function useScanController(navigation) {
     imageUri,
     crop,
     setCrop,
-    crops: CROPS,
+    crops,
     pickImage,
     analyze: () => analyzeAction.run(),
     loading: analyzeAction.loading,

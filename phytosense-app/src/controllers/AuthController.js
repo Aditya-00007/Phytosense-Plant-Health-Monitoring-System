@@ -24,7 +24,14 @@ export function useRegisterController() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const action = useAction(() => signUp(name.trim(), email.trim(), password));
+  const [farmLocation, setFarmLocation] = useState('');
+  const [phone, setPhone] = useState('');
+  const action = useAction(() =>
+    signUp(name.trim(), email.trim(), password, {
+      farmLocation: farmLocation.trim(),
+      phone: phone.trim(),
+    }),
+  );
 
   const submit = () => {
     if (!name.trim()) return action.setError('Enter your name');
@@ -33,5 +40,19 @@ export function useRegisterController() {
     action.run();
   };
 
-  return { name, setName, email, setEmail, password, setPassword, submit, loading: action.loading, error: action.error };
+  return {
+    name,
+    setName,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    farmLocation,
+    setFarmLocation,
+    phone,
+    setPhone,
+    submit,
+    loading: action.loading,
+    error: action.error,
+  };
 }

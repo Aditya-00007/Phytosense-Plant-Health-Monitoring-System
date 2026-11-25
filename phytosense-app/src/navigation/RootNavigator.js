@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../context/AuthContext';
 import { LoadingView } from '../components/StateViews';
+import { colors } from '../theme';
 import MainTabs from './MainTabs';
 import LoginView from '../views/auth/LoginView';
 import RegisterView from '../views/auth/RegisterView';
@@ -17,7 +18,13 @@ export default function RootNavigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: colors.card },
+          headerTintColor: colors.primary,
+          headerTitleStyle: { color: colors.primary, fontWeight: '700' },
+        }}
+      >
         {user ? (
           <>
             <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />

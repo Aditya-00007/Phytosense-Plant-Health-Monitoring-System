@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { CROPS } from '../config/crops';
 import { createPost, getPosts } from '../services/communityService';
+import { getMainCrop } from '../utils/profile';
 import { useAction } from '../utils/useAction';
 
 export function useCommunityController() {
@@ -25,7 +26,7 @@ export function useCommunityController() {
   }, [load]);
 
   const postAction = useAction(async () => {
-    const post = await createPost({ text: text.trim(), crop: CROPS[0], author: user?.name });
+    const post = await createPost({ text: text.trim(), crop: getMainCrop(user) || CROPS[0], author: user?.name });
     setPosts((prev) => [post, ...prev]);
     setText('');
   });

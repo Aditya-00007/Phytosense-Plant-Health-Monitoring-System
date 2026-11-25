@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
-import { colors, radius, spacing } from '../theme';
+import { colors, radius, shadows, spacing } from '../theme';
 
 export default function Button({ title, onPress, loading, disabled, variant = 'primary', style }) {
   const outline = variant === 'outline';
@@ -9,7 +9,14 @@ export default function Button({ title, onPress, loading, disabled, variant = 'p
     <Pressable
       onPress={onPress}
       disabled={off}
-      style={({ pressed }) => [s.btn, outline && s.outline, off && s.off, pressed && s.pressed, style]}
+      style={({ pressed }) => [
+        s.btn,
+        !outline && shadows.button,
+        outline && s.outline,
+        off && s.off,
+        pressed && s.pressed,
+        style,
+      ]}
     >
       {loading ? (
         <ActivityIndicator color={outline ? colors.primary : '#fff'} />
@@ -22,17 +29,17 @@ export default function Button({ title, onPress, loading, disabled, variant = 'p
 
 const s = StyleSheet.create({
   btn: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primaryMid,
     paddingVertical: 14,
     paddingHorizontal: spacing.lg,
-    borderRadius: radius.md,
+    borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 48,
     marginVertical: spacing.xs,
   },
-  outline: { backgroundColor: 'transparent', borderWidth: 1.5, borderColor: colors.primary },
+  outline: { backgroundColor: colors.card, borderWidth: 1.5, borderColor: colors.primaryMid },
   off: { opacity: 0.55 },
-  pressed: { opacity: 0.85 },
+  pressed: { opacity: 0.88, transform: [{ scale: 0.99 }] },
   text: { color: '#fff', fontSize: 16, fontWeight: '600' },
 });

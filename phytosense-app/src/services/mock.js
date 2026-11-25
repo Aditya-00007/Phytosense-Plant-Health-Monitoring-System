@@ -9,11 +9,44 @@ let posts = [
 export const mock = {
   async login(email) {
     await wait();
-    return { token: 'mock-token', user: { id: '1', name: email.split('@')[0], email } };
+    return {
+      token: 'mock-token',
+      user: {
+        id: '1',
+        name: email.split('@')[0],
+        email,
+        farm_location: 'Pune, Maharashtra',
+        farm_size: '4.5',
+        farming_type: 'Mixed',
+        irrigation: 'Drip',
+        Water_Availability: 'Medium',
+        primary_crops: 'Tomato, Onion',
+        receive_weather_alerts: true,
+        preferred_language: 'English',
+      },
+    };
   },
-  async register(name, email) {
+  async register(name, email, extra = {}) {
     await wait();
-    return { token: 'mock-token', user: { id: '1', name, email } };
+    return {
+      token: 'mock-token',
+      user: {
+        id: '1',
+        name,
+        email,
+        phone: extra.phone || '',
+        farm_location: extra.farmLocation || '',
+        farming_type: 'Conventional',
+        irrigation: 'Drip',
+        Water_Availability: 'Medium',
+        receive_weather_alerts: true,
+        preferred_language: 'English',
+      },
+    };
+  },
+  async updateProfile(user, updates) {
+    await wait(400);
+    return { ...user, ...updates, lastUpdated: new Date().toISOString() };
   },
   async diagnose() {
     await wait(1500);

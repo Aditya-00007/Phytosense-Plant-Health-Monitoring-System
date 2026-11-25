@@ -22,6 +22,8 @@ export default function MainTabs() {
       screenOptions={{
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.muted,
+        tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.border },
+        headerStyle: { backgroundColor: colors.card, borderBottomWidth: 2, borderBottomColor: colors.primaryMid },
         headerTitleStyle: { color: colors.primary, fontWeight: '700' },
       }}
     >
