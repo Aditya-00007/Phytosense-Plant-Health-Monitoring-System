@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "PhytoSense",
+    "slug": "phytosense",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "light",
+    "ios": { "supportsTablet": true },
+    "android": { "permissions": ["CAMERA", "ACCESS_FINE_LOCATION"] },
+    "plugins": [
+      ["expo-image-picker", { "cameraPermission": "PhytoSense needs the camera to scan plants." }],
+      ["expo-location", { "locationWhenInUsePermission": "Used for local weather alerts." }]
+    ]
+  }
+}
