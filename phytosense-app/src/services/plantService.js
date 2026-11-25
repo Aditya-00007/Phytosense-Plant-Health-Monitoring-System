@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { USE_MOCK } from '../config/env';
 import { request } from './api';
 import { ENDPOINTS } from './endpoints';
@@ -9,7 +10,12 @@ export async function diagnose({ imageUri, crop, coords }) {
   if (USE_MOCK) return Diagnosis.fromApi(await mock.diagnose(), imageUri);
 
   const form = new FormData();
-  form.append('image', { uri: imageUri, name: 'plant.jpg', type: 'image/jpeg' });
+  if (Platform.OS === 'web') {
+    const blob = await (await fetch(imageUri)).blob();
+    form.append('image', blob, 'plant.jpg');
+  } else {
+    form.append('image', { uri: imageUri, name: 'plant.jpg', type: 'image/jpeg' });
+  }
   form.append('crop', crop);
   if (coords) {
     form.append('lat', String(coords.lat));
