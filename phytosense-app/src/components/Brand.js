@@ -1,16 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useLanguage } from '../context/LanguageContext';
 import { colors, shadows, spacing } from '../theme';
 
 export default function Brand({ subtitle }) {
+  const { t } = useLanguage();
   return (
     <View style={s.wrap}>
       <View style={s.iconBadge}>
         <Ionicons name="leaf" size={40} color={colors.primary} />
       </View>
-      <Text style={s.name}>PhytoSense</Text>
-      {subtitle ? <Text style={s.sub}>{subtitle}</Text> : null}
+      <Text style={s.name}>{t('PhytoSense')}</Text>
+      {subtitle ? <Text style={s.sub}>{t(subtitle)}</Text> : null}
     </View>
   );
 }

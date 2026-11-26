@@ -8,12 +8,14 @@ import WeatherCard from '../../components/WeatherCard';
 import AlertItem from '../../components/AlertItem';
 import Card from '../../components/Card';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { useAlertsController } from '../../controllers/AlertsController';
 import { getFarmSizeCategory, getMainCrop, getRegionFromLocation, getSeasonDetails } from '../../utils/profile';
 import { colors, radius, spacing } from '../../theme';
 
 export default function HomeView({ navigation }) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const { weather, alerts, refreshing, refresh } = useAlertsController();
   const season = getSeasonDetails(user?.farmLocation);
   const region = getRegionFromLocation(user?.farmLocation);
@@ -24,16 +26,16 @@ export default function HomeView({ navigation }) {
     <ScreenContainer onRefresh={refresh} refreshing={refreshing}>
       <View style={s.banner}>
         <View style={{ flex: 1 }}>
-          <Text style={s.hello}>Hello, {user?.name}</Text>
+          <Text style={s.hello}>{`${t('Hello')}, ${user?.name}`}</Text>
           <Text style={s.subBanner}>
-            {[user?.farmLocation || 'Set farm location', region, mainCrop ? `Main crop: ${mainCrop}` : null]
+            {[user?.farmLocation || t('Set farm location'), region, mainCrop ? `${t('Main crop')}: ${t(mainCrop)}` : null]
               .filter(Boolean)
               .join(' • ')}
           </Text>
         </View>
         <Pressable onPress={() => navigation.navigate('Profile')} style={s.profilePill}>
           <Ionicons name="person-outline" size={16} color={colors.primary} />
-          <Text style={s.profilePillText}>Profile</Text>
+          <Text style={s.profilePillText}>{t('Profile')}</Text>
         </Pressable>
       </View>
 
@@ -43,21 +45,21 @@ export default function HomeView({ navigation }) {
         <Card>
           <View style={[s.seasonBadge, { backgroundColor: season.color }]}>
             <Ionicons name={season.icon} size={18} color="#fff" />
-            <Text style={s.seasonText}>{season.season}</Text>
+            <Text style={s.seasonText}>{t(season.season)}</Text>
           </View>
           {season.tips.slice(0, 2).map((tip, idx) => (
-            <Text key={idx} style={s.tip}>• {tip}</Text>
+            <Text key={idx} style={s.tip}>• {t(tip)}</Text>
           ))}
           {user?.farmSize ? (
             <Text style={s.farmMeta}>
-              Farm: {user.farmSize} acres{sizeCategory !== 'Unknown' ? ` (${sizeCategory})` : ''} • {user.irrigation || 'Drip'}
+              {`${t('Farm')}: ${user.farmSize} ${t('acres')}${sizeCategory !== 'Unknown' ? ` (${t(sizeCategory)})` : ''} • ${t(user.irrigation || 'Drip')}`}
             </Text>
           ) : null}
         </Card>
         {alerts.length ? (
           <AlertItem alert={alerts[0]} />
         ) : (
-          <Card><Text style={s.none}>No active alerts</Text></Card>
+          <Card><Text style={s.none}>{t('No active alerts')}</Text></Card>
         )}
       </ResponsiveGrid>
     </ScreenContainer>

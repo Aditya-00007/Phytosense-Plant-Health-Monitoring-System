@@ -4,10 +4,12 @@ import ResponsiveGrid from '../../components/ResponsiveGrid';
 import DiagnosisHeader from '../../components/DiagnosisHeader';
 import InfoList from '../../components/InfoList';
 import Button from '../../components/Button';
+import { useLanguage } from '../../context/LanguageContext';
 import { spacing } from '../../theme';
 
 export default function ResultView({ route, navigation }) {
   const { diagnosis } = route.params;
+  const { t } = useLanguage();
   return (
     <ScreenContainer>
       <DiagnosisHeader diagnosis={diagnosis} />
@@ -17,7 +19,7 @@ export default function ResultView({ route, navigation }) {
         <InfoList title="Prevention" icon="shield-checkmark" items={diagnosis.prevention} />
         <InfoList title="Irrigation Guidance" icon="water" items={diagnosis.irrigation} />
       </ResponsiveGrid>
-      <Button title="Scan another plant" onPress={() => navigation.replace('Scan')} style={{ marginTop: spacing.md }} />
+      <Button title={t('Scan another plant')} onPress={() => navigation.replace('Scan')} style={{ marginTop: spacing.md }} />
     </ScreenContainer>
   );
 }

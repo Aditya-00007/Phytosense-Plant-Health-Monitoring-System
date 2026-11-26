@@ -1,16 +1,18 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useLanguage } from '../context/LanguageContext';
 import { colors, radius, shadows, spacing } from '../theme';
 
 export default function ScanCard({ onPress }) {
+  const { t } = useLanguage();
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [s.card, pressed && s.pressed]}>
       <View style={s.iconWrap}>
         <Ionicons name="scan" size={44} color={colors.primary} />
       </View>
-      <Text style={s.title}>Scan Plant</Text>
-      <Text style={s.sub}>Detect • Diagnose • Grow Better</Text>
+      <Text style={s.title}>{t('Scan Plant')}</Text>
+      <Text style={s.sub}>{t('Detect • Diagnose • Grow Better')}</Text>
     </Pressable>
   );
 }

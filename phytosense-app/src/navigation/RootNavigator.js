@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { LoadingView } from '../components/StateViews';
 import { colors } from '../theme';
 import MainTabs from './MainTabs';
@@ -14,6 +15,7 @@ const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
   const { user, loading } = useAuth();
+  const { t } = useLanguage();
   if (loading) return <LoadingView />;
 
   return (
@@ -28,13 +30,13 @@ export default function RootNavigator() {
         {user ? (
           <>
             <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
-            <Stack.Screen name="Scan" component={ScanView} options={{ title: 'Plant Diagnosis' }} />
-            <Stack.Screen name="Result" component={ResultView} options={{ title: 'Diagnosis Result' }} />
+            <Stack.Screen name="Scan" component={ScanView} options={{ title: t('Plant Diagnosis') }} />
+            <Stack.Screen name="Result" component={ResultView} options={{ title: t('Diagnosis Result') }} />
           </>
         ) : (
           <>
             <Stack.Screen name="Login" component={LoginView} options={{ headerShown: false }} />
-            <Stack.Screen name="Register" component={RegisterView} options={{ title: 'Create account' }} />
+            <Stack.Screen name="Register" component={RegisterView} options={{ title: t('Create account') }} />
           </>
         )}
       </Stack.Navigator>

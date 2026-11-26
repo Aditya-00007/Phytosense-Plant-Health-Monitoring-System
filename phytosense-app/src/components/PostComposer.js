@@ -3,20 +3,22 @@ import Card from './Card';
 import TextField from './TextField';
 import Button from './Button';
 import { ErrorText } from './StateViews';
+import { useLanguage } from '../context/LanguageContext';
 import { spacing } from '../theme';
 
 export default function PostComposer({ text, onChangeText, onSubmit, loading, error }) {
+  const { t } = useLanguage();
   return (
     <Card style={{ marginBottom: spacing.md }}>
       <TextField
-        placeholder="Share your experience..."
+        placeholder={t('Share your experience...')}
         value={text}
         onChangeText={onChangeText}
         multiline
         style={{ minHeight: 70, textAlignVertical: 'top' }}
       />
       <ErrorText message={error} />
-      <Button title="Post" onPress={onSubmit} loading={loading} disabled={!text.trim()} />
+      <Button title={t('Post')} onPress={onSubmit} loading={loading} disabled={!text.trim()} />
     </Card>
   );
 }

@@ -5,6 +5,7 @@ export const ENDPOINTS = {
   profile: '/auth/profile',
   diagnose: '/predict',
   weather: '/weather',
+  forecast: '/weather/forecast',
   alerts: '/alerts',
   posts: '/community/posts',
 };

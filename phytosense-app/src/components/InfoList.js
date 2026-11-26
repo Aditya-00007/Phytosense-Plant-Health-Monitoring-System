@@ -2,19 +2,21 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Card from './Card';
+import { useLanguage } from '../context/LanguageContext';
 import { colors, spacing } from '../theme';
 
 // Titled card with bullet items (causes, treatment, prevention, irrigation...).
 export default function InfoList({ title, icon, items }) {
+  const { t } = useLanguage();
   if (!items?.length) return null;
   return (
     <Card style={{ flex: 1 }}>
       <View style={s.head}>
         <Ionicons name={icon} size={20} color={colors.primary} />
-        <Text style={s.title}>{title}</Text>
+        <Text style={s.title}>{t(title)}</Text>
       </View>
       {items.map((it, i) => (
-        <Text key={i} style={s.item}>• {it}</Text>
+        <Text key={i} style={s.item}>• {t(it)}</Text>
       ))}
     </Card>
   );

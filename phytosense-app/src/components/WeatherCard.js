@@ -1,19 +1,37 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Card from './Card';
+import { useLanguage } from '../context/LanguageContext';
+import { getWeatherIconUrl } from '../services/weatherService';
 import { colors, spacing } from '../theme';
 
 export default function WeatherCard({ weather }) {
+  const { t } = useLanguage();
+  const iconUrl = getWeatherIconUrl(weather?.icon);
+
   return (
     <Card style={s.card}>
-      <Ionicons name="partly-sunny" size={36} color={colors.accent} />
-      <View style={{ marginLeft: spacing.md }}>
-        <Text style={s.title}>Local Weather</Text>
-        <Text style={s.value}>
-          {weather ? `${weather.condition}, ${weather.temp}°C` : 'Loading...'}
+      {iconUrl ? (
+        <Image source={{ uri: iconUrl }} style={s.owmIcon} />
+      ) : (
+        <Ionicons name="partly-sunny" size={38} color={colors.accent} />
+      )}
+      <View style={s.body}>
+        <Text style={s.title}>
+          {t('Local Weather')}
+          {weather?.locationName ? ` • ${weather.locationName}` : ''}
         </Text>
-        {weather?.humidity != null ? <Text style={s.sub}>Humidity {weather.humidity}%</Text> : null}
+        <Text style={s.value}>
+          {weather ? `${t(weather.condition)}, ${weather.temp}°C` : t('Loading...')}
+        </Text>
+        {weather ? (
+          <Text style={s.sub}>
+            {`${t('Feels like')} ${weather.feelsLike}°C`}
+            {weather.humidity != null ? ` • ${t('Humidity')} ${weather.humidity}%` : ''}
+            {weather.windSpeed != null ? ` • ${t('Wind')} ${weather.windSpeed} m/s ${weather.windDir || ''}` : ''}
+          </Text>
+        ) : null}
       </View>
     </Card>
   );
@@ -21,7 +39,9 @@ export default function WeatherCard({ weather }) {
 
 const s = StyleSheet.create({
   card: { flexDirection: 'row', alignItems: 'center' },
-  title: { color: colors.muted, fontWeight: '600' },
-  value: { fontSize: 18, fontWeight: '700', color: colors.text },
-  sub: { color: colors.muted },
+  owmIcon: { width: 54, height: 54 },
+  body: { marginLeft: spacing.md, flex: 1 },
+  title: { color: colors.muted, fontWeight: '600', fontSize: 13 },
+  value: { fontSize: 18, fontWeight: '700', color: colors.text, marginTop: 2 },
+  sub: { color: colors.muted, fontSize: 12, marginTop: 2 },
 });

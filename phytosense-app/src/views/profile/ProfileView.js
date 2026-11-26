@@ -7,7 +7,9 @@ import Badge from '../../components/Badge';
 import Button from '../../components/Button';
 import TextField from '../../components/TextField';
 import CropChips from '../../components/CropChips';
+import LanguageSelector from '../../components/LanguageSelector';
 import { ErrorText } from '../../components/StateViews';
+import { useLanguage } from '../../context/LanguageContext';
 import { useProfileController } from '../../controllers/ProfileController';
 import { FARMING_TYPES, IRRIGATION_METHODS, LANGUAGES, WATER_LEVELS } from '../../utils/profile';
 import { colors, radius, spacing } from '../../theme';
@@ -16,13 +18,14 @@ function DetailRow({ label, value }) {
   return (
     <View style={s.row}>
       <Text style={s.rowLabel}>{label}</Text>
-      <Text style={s.rowValue}>{value || 'Not set'}</Text>
+      <Text style={s.rowValue}>{value}</Text>
     </View>
   );
 }
 
 export default function ProfileView() {
   const c = useProfileController();
+  const { t } = useLanguage();
   const { user, form } = c;
 
   return (
@@ -33,49 +36,50 @@ export default function ProfileView() {
         <Text style={s.email}>{user?.email}</Text>
         <View style={s.badges}>
           {c.region ? <Badge label={c.region} color={colors.primary} /> : null}
-          {c.sizeCategory !== 'Unknown' ? <Badge label={`${c.sizeCategory} Farm`} color={colors.primaryMid} /> : null}
-          {user?.farmingType ? <Badge label={user.farmingType} color={colors.accent} /> : null}
+          {c.sizeCategory !== 'Unknown' ? <Badge label={`${t(c.sizeCategory)} Farm`} color={colors.primaryMid} /> : null}
+          {user?.farmingType ? <Badge label={t(user.farmingType)} color={colors.accent} /> : null}
         </View>
+        <LanguageSelector style={{ marginTop: spacing.md, justifyContent: 'center' }} />
       </Card>
 
       {c.savedNotice ? (
         <View style={s.successBox}>
           <Ionicons name="checkmark-circle" size={18} color={colors.primary} />
-          <Text style={s.successText}>Farmer profile updated successfully!</Text>
+          <Text style={s.successText}>{t('Farmer profile updated successfully!')}</Text>
         </View>
       ) : null}
 
       {c.editing ? (
         <>
           <Card style={s.section}>
-            <Text style={s.sectionTitle}>Personal Information</Text>
-            <TextField label="Full Name" value={form.name} onChangeText={(v) => c.setField('name', v)} />
-            <TextField label="Phone Number" value={form.phone} onChangeText={(v) => c.setField('phone', v)} keyboardType="phone-pad" placeholder="e.g., +91 98765 43210" />
-            <TextField label="Farm Location" value={form.farmLocation} onChangeText={(v) => c.setField('farmLocation', v)} placeholder="e.g., Pune, Maharashtra" />
+            <Text style={s.sectionTitle}>{t('Personal Information')}</Text>
+            <TextField label={t('Full Name')} value={form.name} onChangeText={(v) => c.setField('name', v)} />
+            <TextField label={t('Phone Number')} value={form.phone} onChangeText={(v) => c.setField('phone', v)} keyboardType="phone-pad" placeholder="e.g., +91 98765 43210" />
+            <TextField label={t('Farm Location')} value={form.farmLocation} onChangeText={(v) => c.setField('farmLocation', v)} placeholder="e.g., Pune, Maharashtra" />
           </Card>
 
           <Card style={s.section}>
-            <Text style={s.sectionTitle}>Farm Details</Text>
-            <TextField label="Farm Size (acres)" value={form.farmSize} onChangeText={(v) => c.setField('farmSize', v)} keyboardType="decimal-pad" placeholder="e.g., 4.5" />
-            <Text style={s.fieldLabel}>Farming Type</Text>
+            <Text style={s.sectionTitle}>{t('Farm Details')}</Text>
+            <TextField label={t('Farm Size (acres)')} value={form.farmSize} onChangeText={(v) => c.setField('farmSize', v)} keyboardType="decimal-pad" placeholder="e.g., 4.5" />
+            <Text style={s.fieldLabel}>{t('Farming Type')}</Text>
             <CropChips options={FARMING_TYPES} value={form.farmingType} onChange={(v) => c.setField('farmingType', v)} />
-            <Text style={s.fieldLabel}>Irrigation Method</Text>
+            <Text style={s.fieldLabel}>{t('Irrigation Method')}</Text>
             <CropChips options={IRRIGATION_METHODS} value={form.irrigation} onChange={(v) => c.setField('irrigation', v)} />
-            <Text style={s.fieldLabel}>Water Availability</Text>
+            <Text style={s.fieldLabel}>{t('Water Availability')}</Text>
             <CropChips options={WATER_LEVELS} value={form.waterAvailability} onChange={(v) => c.setField('waterAvailability', v)} />
-            <TextField label="Estimated Annual Income (₹)" value={form.income} onChangeText={(v) => c.setField('income', v)} keyboardType="numeric" placeholder="e.g., 250000" />
+            <TextField label={t('Estimated Annual Income (₹)')} value={form.income} onChangeText={(v) => c.setField('income', v)} keyboardType="numeric" placeholder="e.g., 250000" />
           </Card>
 
           <Card style={s.section}>
-            <Text style={s.sectionTitle}>Crops</Text>
-            <TextField label="Primary Crops (comma-separated)" value={form.primaryCrops} onChangeText={(v) => c.setField('primaryCrops', v)} placeholder="e.g., Tomato, Onion, Wheat" />
-            <TextField label="Secondary Crops (comma-separated)" value={form.secondaryCrops} onChangeText={(v) => c.setField('secondaryCrops', v)} placeholder="e.g., Potato, Soybean" />
+            <Text style={s.sectionTitle}>{t('Crops')}</Text>
+            <TextField label={t('Primary Crops (comma-separated)')} value={form.primaryCrops} onChangeText={(v) => c.setField('primaryCrops', v)} placeholder="e.g., Tomato, Onion, Wheat" />
+            <TextField label={t('Secondary Crops (comma-separated)')} value={form.secondaryCrops} onChangeText={(v) => c.setField('secondaryCrops', v)} placeholder="e.g., Potato, Soybean" />
           </Card>
 
           <Card style={s.section}>
-            <Text style={s.sectionTitle}>Preferences</Text>
+            <Text style={s.sectionTitle}>{t('Preferences')}</Text>
             <View style={s.switchRow}>
-              <Text style={s.switchLabel}>Receive Weather Alerts</Text>
+              <Text style={s.switchLabel}>{t('Receive Weather Alerts')}</Text>
               <Switch
                 value={form.receiveWeatherAlerts}
                 onValueChange={(v) => c.setField('receiveWeatherAlerts', v)}
@@ -83,41 +87,41 @@ export default function ProfileView() {
                 thumbColor={colors.card}
               />
             </View>
-            <Text style={s.fieldLabel}>Preferred Language</Text>
+            <Text style={s.fieldLabel}>{t('Preferred Language')}</Text>
             <CropChips options={LANGUAGES} value={form.preferredLanguage} onChange={(v) => c.setField('preferredLanguage', v)} />
           </Card>
 
-          <ErrorText message={c.error} />
+          <ErrorText message={t(c.error)} />
           <View style={s.actions}>
-            <Button title="Cancel" variant="outline" onPress={c.cancel} style={s.half} />
-            <Button title="Save Profile" onPress={c.save} loading={c.saving} style={s.half} />
+            <Button title={t('Cancel')} variant="outline" onPress={c.cancel} style={s.half} />
+            <Button title={t('Save Profile')} onPress={c.save} loading={c.saving} style={s.half} />
           </View>
         </>
       ) : (
         <>
           <Card style={s.section}>
-            <Text style={s.sectionTitle}>Farm Profile</Text>
-            <DetailRow label="Phone" value={user?.phone} />
-            <DetailRow label="Location" value={user?.farmLocation} />
+            <Text style={s.sectionTitle}>{t('Farm Profile')}</Text>
+            <DetailRow label={t('Phone')} value={user?.phone || t('Not set')} />
+            <DetailRow label={t('Location')} value={user?.farmLocation || t('Not set')} />
             <DetailRow
-              label="Farm Size"
-              value={user?.farmSize ? `${user.farmSize} acres${c.sizeCategory !== 'Unknown' ? ` (${c.sizeCategory})` : ''}` : ''}
+              label={t('Farm Size')}
+              value={user?.farmSize ? `${user.farmSize} ${t('acres')}${c.sizeCategory !== 'Unknown' ? ` (${t(c.sizeCategory)})` : ''}` : t('Not set')}
             />
-            <DetailRow label="Farming Type" value={user?.farmingType} />
-            <DetailRow label="Irrigation" value={user?.irrigation} />
-            <DetailRow label="Water Availability" value={user?.waterAvailability} />
-            <DetailRow label="Annual Income" value={user?.income ? `₹${user.income}` : ''} />
-            <DetailRow label="Primary Crops" value={user?.primaryCrops} />
-            <DetailRow label="Secondary Crops" value={user?.secondaryCrops} />
-            <DetailRow label="Language" value={user?.preferredLanguage} />
-            <DetailRow label="Weather Alerts" value={user?.receiveWeatherAlerts ? 'Enabled' : 'Disabled'} />
+            <DetailRow label={t('Farming Type')} value={user?.farmingType ? t(user.farmingType) : t('Not set')} />
+            <DetailRow label={t('Irrigation')} value={user?.irrigation ? t(user.irrigation) : t('Not set')} />
+            <DetailRow label={t('Water Availability')} value={user?.waterAvailability ? t(user.waterAvailability) : t('Not set')} />
+            <DetailRow label={t('Annual Income')} value={user?.income ? `₹${user.income}` : t('Not set')} />
+            <DetailRow label={t('Primary Crops')} value={user?.primaryCrops || t('Not set')} />
+            <DetailRow label={t('Secondary Crops')} value={user?.secondaryCrops || t('Not set')} />
+            <DetailRow label={t('Language')} value={user?.preferredLanguage || t('Not set')} />
+            <DetailRow label={t('Weather Alerts')} value={user?.receiveWeatherAlerts ? t('Enabled') : t('Disabled')} />
           </Card>
 
-          <Button title="Edit Farmer Profile" onPress={c.startEdit} style={{ marginTop: spacing.md }} />
+          <Button title={t('Edit Farmer Profile')} onPress={c.startEdit} style={{ marginTop: spacing.md }} />
         </>
       )}
 
-      <Button title="Sign out" variant="outline" onPress={c.signOut} style={{ marginTop: spacing.sm }} />
+      <Button title={t('Sign out')} variant="outline" onPress={c.signOut} style={{ marginTop: spacing.sm }} />
     </ScreenContainer>
   );
 }

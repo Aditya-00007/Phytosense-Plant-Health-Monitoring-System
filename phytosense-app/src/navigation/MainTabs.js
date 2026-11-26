@@ -5,7 +5,9 @@ import HomeView from '../views/home/HomeView';
 import CommunityView from '../views/community/CommunityView';
 import AlertsView from '../views/alerts/AlertsView';
 import ProfileView from '../views/profile/ProfileView';
-import { colors } from '../theme';
+import LanguageSelector from '../components/LanguageSelector';
+import { useLanguage } from '../context/LanguageContext';
+import { colors, spacing } from '../theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +19,8 @@ const TABS = [
 ];
 
 export default function MainTabs() {
+  const { t } = useLanguage();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -25,16 +29,18 @@ export default function MainTabs() {
         tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.border },
         headerStyle: { backgroundColor: colors.card, borderBottomWidth: 2, borderBottomColor: colors.primaryMid },
         headerTitleStyle: { color: colors.primary, fontWeight: '700' },
+        headerRight: () => <LanguageSelector compact style={{ marginRight: spacing.md }} />,
       }}
     >
-      {TABS.map((t) => (
+      {TABS.map((tab) => (
         <Tab.Screen
-          key={t.name}
-          name={t.name}
-          component={t.component}
+          key={tab.name}
+          name={tab.name}
+          component={tab.component}
           options={{
-            title: t.name === 'Home' ? 'PhytoSense' : t.name,
-            tabBarIcon: ({ color, size }) => <Ionicons name={t.icon} size={size} color={color} />,
+            title: t(tab.name === 'Home' ? 'PhytoSense' : tab.name),
+            tabBarLabel: t(tab.name),
+            tabBarIcon: ({ color, size }) => <Ionicons name={tab.icon} size={size} color={color} />,
           }}
         />
       ))}
